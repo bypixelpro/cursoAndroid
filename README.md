@@ -1,3 +1,3 @@
 # cursoAndroid
 
-Bienvenido a la documentación para los ejercicio del curso de Android
+El intent implicito del sistema, se produce en este caso al enviar una imagen para compartirla.
