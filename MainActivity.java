@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
-    //8 Cargamos el tiempo
+    //9 Cargamos el tiempo
     private CurrentWeather mCurrentWeather;
 
     @Override
@@ -90,8 +90,22 @@ public class MainActivity extends AppCompatActivity {
         JSONObject forecast = new JSONObject(jsonData);
         String timezone = forecast.getString("timezone");
 
+        //10) Escribimos el JSON parseando datos
 
-        return new CurrentWeather();
+        JSONObject currently = forecast.getJSONObject("currently");
+
+        CurrentWeather currentWeather = new CurrentWeather();
+        currentWeather.setHumidity(currently.getDouble("humidity"));
+        currentWeather.setTime(currently.getLong("time"));
+        currentWeather.setIcon(currently.getString("icon"));
+        currentWeather.setPrecipChance(currently.getDouble("precipProbability"));
+        currentWeather.setSummary(currently.getString("summary"));
+        currentWeather.setTemperature(currently.getDouble("temperature"));
+
+
+        return currentWeather;
+
+
     }
 
     private boolean tenemosRed() {
