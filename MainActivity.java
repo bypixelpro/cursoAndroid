@@ -45,9 +45,12 @@ public class MainActivity extends AppCompatActivity {
 
 
                 try {
+                    Log.v(TAG, response.body().string());
 
                     if (response.isSuccessful()){
-                        Log.v(TAG, response.body().string());
+
+                    }else{
+                        alertUserAboutError();
                     }
 
                 } catch (IOException e) {
@@ -60,5 +63,10 @@ public class MainActivity extends AppCompatActivity {
 
         Log.v(TAG, "Ejecutamos el hilo principal");
 
+    }
+
+    private void alertUserAboutError() {
+        AlertaUsuarioFragment dialog = new AlertaUsuarioFragment();
+        dialog.show(getFragmentManager(), "error");
     }
 }
