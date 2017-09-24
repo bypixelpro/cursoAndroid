@@ -7,6 +7,7 @@ import android.util.Log;
 import java.io.IOException;
 
 import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
@@ -32,16 +33,32 @@ public class MainActivity extends AppCompatActivity {
         Call call = client.newCall(peticion);
         //2) La ejecutamos con un bloque try *** Response respouesta = call.execute(); ***
 
-        try {
-            Response respuesta = call.execute();
-            // Nos mostramos el resultado si es que existe
-            if (respuesta.isSuccessful()){
-                Log.v(TAG, respuesta.body().string());
+        //5) Metodo asincrono, callback
+        call.enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+
             }
 
-        } catch (IOException e) {
-            //3) Sacamos un mensaje en el log con la excepcion ocurrida
-            Log.e(TAG, "Ha ocurrido un error: ", e);
-        }
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+
+                try {
+
+                    if (response.isSuccessful()){
+                        Log.v(TAG, response.body().string());
+                    }
+
+                } catch (IOException e) {
+                    //3) Sacamos un mensaje en el log con la excepcion ocurrida
+                    Log.e(TAG, "Ha ocurrido un error: ", e);
+                }
+
+            }
+        });
+
+        Log.v(TAG, "Ejecutamos el hilo principal");
+
     }
 }
