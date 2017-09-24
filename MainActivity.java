@@ -8,6 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -19,6 +22,9 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = MainActivity.class.getSimpleName();
+
+    //8 Cargamos el tiempo
+    private CurrentWeather mCurrentWeather;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,9 +57,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                     try {
-                        Log.v(TAG, response.body().string());
-
+                        //9)
+                        String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
+                            mCurrentWeather = getCurrentDetails(jsonData);
 
                         } else {
                             alertUserAboutError();
@@ -63,6 +71,10 @@ public class MainActivity extends AppCompatActivity {
                         //3) Sacamos un mensaje en el log con la excepcion ocurrida
                         Log.e(TAG, "Ha ocurrido un error: ", e);
                     }
+                    catch (JSONException e){
+                        Log.e(TAG, "Ha ocurrido un error: ", e);
+
+                    }
 
                 }
             });
@@ -71,6 +83,15 @@ public class MainActivity extends AppCompatActivity {
         }
         Log.v(TAG, "Ejecutamos el hilo principal");
 
+    }
+
+    private CurrentWeather getCurrentDetails(String jsonData) throws JSONException {
+
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+
+
+        return new CurrentWeather();
     }
 
     private boolean tenemosRed() {
